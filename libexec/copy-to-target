@@ -2,6 +2,8 @@
 
 . gconfig
 
+gitian_target=${gitian_target:-"gitian-target"}
+
 TUSER=${DISTRO:-ubuntu}
 QUIET_FLAG="-vP"
 
@@ -47,9 +49,9 @@ if [ $# = 0 ] ; then
 fi
 
 if [ -n "$USE_DOCKER" ]; then
-    docker exec -u $TUSER gitian-target mkdir -p "/home/$TUSER/$2"
-    docker cp "$1" gitian-target:"/home/$TUSER/$2"
-    docker exec -u root gitian-target chown -R $TUSER:$TUSER "/home/$TUSER/$2"
+    docker exec -u $TUSER ${gitian_target} mkdir -p "/home/$TUSER/$2"
+    docker cp "$1" ${gitian_target}:"/home/$TUSER/$2"
+    docker exec -u root ${gitian_target} chown -R $TUSER:$TUSER "/home/$TUSER/$2"
 elif [ -z "$USE_LXC" ]; then
     src="${1%/}"  # remove trailing / which triggers special rsync behaviour
     rsync --checksum -a $QUIET_FLAG -e "ssh -oConnectTimeout=30 -oNoHostAuthenticationForLocalhost=yes -i ${GITIAN_BASE:-.}/var/id_rsa -p $VM_SSH_PORT" "${src}" "$TUSER@localhost:$2"

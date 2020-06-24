@@ -2,6 +2,8 @@
 
 . gconfig
 
+gitian_target=${gitian_target:-"gitian-target"}
+
 ARCH=qemu$1
 SUFFIX=$2
 
@@ -37,6 +39,6 @@ case $VMSW in
     echo "Gitian-${2}" > var/target.vmname
     ;;
   DOCKER)
-    docker run -d --name gitian-target base-$SUFFIX:latest > /dev/null
+    docker run -d --name ${gitian_target} base-$SUFFIX:latest > /dev/null
     ;;
 esac

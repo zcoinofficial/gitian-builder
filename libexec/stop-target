@@ -1,5 +1,7 @@
 #!/bin/sh
 
+gitian_target=${gitian_target:-"gitian-target"}
+
 VMSW=KVM
 if [ -n "$USE_LXC" ]; then
     VMSW=LXC
@@ -33,7 +35,7 @@ case $VMSW in
     rm var/target.vmname
     ;;
   DOCKER)
-    docker container stop gitian-target > /dev/null
-    docker container rm gitian-target > /dev/null
+    docker container stop ${gitian_target} > /dev/null
+    docker container rm ${gitian_target} > /dev/null
     ;;
 esac
